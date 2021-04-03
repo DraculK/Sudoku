@@ -10,8 +10,10 @@ var (
 	digitos        = "123456789"
 	linhas         = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I"}
 
-	colunas   = digitosValidos
-	quadrados = cruzamento(linhas, colunas)
+	colunas         = digitosValidos
+	quadrados       = cruzamento(linhas, colunas)
+	listaCaracteres = getListaCaracteres()
+	encontraCelula  = getEncontraCelula()
 )
 
 //Função para juntar as Linhas com as Conlunas, resultando em [A1,A2..I9]
@@ -27,7 +29,7 @@ func cruzamento(linha, coluna []string) []string {
 }
 
 //Retorna as linhas, as colunas e os quadrados
-func listaCaracteres() [][]string {
+func getListaCaracteres() [][]string {
 	cLista := make([][]string, len(linhas)*3)
 
 	iterador := 0
@@ -56,4 +58,27 @@ func listaCaracteres() [][]string {
 	}
 
 	return cLista
+}
+
+//Função para encontrar valores por meio das chaves do map. Assim, conseguimos encontrar a linha, a coluna e o quadrado da unidade em questão.
+func getEncontraCelula() map[string][][]string {
+	mapEncontra := make(map[string][][]string)
+
+	for _, s := range quadrados {
+		celula := make([][]string, 3)
+		iterador := 0
+		for _, unidade := range listaCaracteres {
+			for _, chave := range unidade {
+				if s == chave {
+					celula[iterador] = unidade
+					mapEncontra[s] = celula
+					iterador++
+					break
+				}
+			}
+
+		}
+	}
+
+	return mapEncontra
 }
