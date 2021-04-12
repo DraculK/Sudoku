@@ -1,4 +1,4 @@
-package sudoku
+package main
 
 import (
 	"fmt"
@@ -10,11 +10,20 @@ var (
 	digitos        = "123456789"
 	linhas         = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I"}
 
-	colunas         = digitosValidos
-	quadrados       = cruzamento(linhas, colunas)
-	listaCaracteres = getListaCaracteres()
-	encontraCelula  = getEncontraCelula()
+	colunas           = digitosValidos
+	quadrados         = cruzamento(linhas, colunas)
+	listaCaracteres   = getListaCaracteres()
+	encontraCelula    = getEncontraCelula()
+	checagemElementos = getChecagemElementos()
 )
+
+func main() {
+	//fmt.Println(colunas)
+	//fmt.Println(quadrados)
+	//fmt.Println(listaCaracteres)
+	//fmt.Println(encontraCelula)
+	//fmt.Println(checagemElementos)
+}
 
 //Função para juntar as Linhas com as Conlunas, resultando em [A1,A2..I9]
 func cruzamento(linha, coluna []string) []string {
@@ -81,4 +90,31 @@ func getEncontraCelula() map[string][][]string {
 	}
 
 	return mapEncontra
+}
+
+//Transforma um elemento em uma chave e pega todos os elementos que não podem ter o mesmo valor(peers).
+func getChecagemElementos() map[string][]string {
+
+	elementosTamanho := 20
+
+	peersFinal := make(map[string][]string)
+	for _, s := range quadrados {
+		peer := make(map[string]interface{}, elementosTamanho)
+		for _, unidade := range encontraCelula[s] {
+			for _, chave := range unidade {
+				if s != chave {
+					peer[chave] = 1
+				}
+			}
+		}
+
+		separacaoPeers := []string{}
+		for elemento := range peer {
+			separacaoPeers = append(separacaoPeers, elemento)
+		}
+		peersFinal[s] = separacaoPeers
+
+	}
+
+	return peersFinal
 }
