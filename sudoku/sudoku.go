@@ -240,3 +240,12 @@ func checaZero(verifica map[string]string) map[string]string {
 
 	return verifica
 }
+
+func copiarMap(valores map[string]string) map[string]string{
+	copiarValor := make(map[string]string, len(valores))
+	for index, valor := range valores {
+		copiarValor[index] = valor
+	}
+
+	return copiarValor
+}
