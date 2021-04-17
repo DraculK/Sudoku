@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"errors"
 )
 
 var (
@@ -117,4 +118,32 @@ func getChecagemElementos() map[string][]string {
 	}
 
 	return peersFinal
+}
+
+// Converte o grid em um dicionário de {quadrado: caractere} com '.' para as casas vazias.
+func valoresGrid(grid string) (map[string]string, error){
+	caracteres := []string{}
+	tamanhoGrid := len(grid)
+	tamanhoCaracteres := len(caracteres)
+
+	for iterador := 0; iterador < tamanhoGrid; iterador++{
+		verifica := string(grid[iterador : iterador+1])
+		if strings.Contains(digitos, verifica) || verifica == "0" || verifica == "."{
+			caracteres = append(caracteres, verifica)
+		}
+	}
+
+	if tamanhoCaracteres != 81 {
+		return nil, errors.New("Tamanho do grid não é 81")
+	}
+
+	novoGrid := make(map[string]string)
+	iterador := 0
+
+	for _, s := range quadrados {
+		novoGrid[s] = caracteres[iterador]
+		iterador++
+	}
+
+	return novoGrid, nil
 }
