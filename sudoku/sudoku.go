@@ -230,3 +230,13 @@ func analisaGrid(grid string) (map[string]string, error) {
 
 	return valores, nil
 }
+
+func checaZero(verifica map[string]string) map[string]string {
+	for index := range verifica {
+		if index == ""{
+			return nil
+		}
+	}
+
+	return verifica
+}
