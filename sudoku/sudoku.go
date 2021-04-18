@@ -123,17 +123,15 @@ func getChecagemElementos() map[string][]string {
 // Converte o grid em um dicionário de {quadrado: caractere} com '.' ou '0' para as casas vazias.
 func valoresGrid(grid string) (map[string]string, error) {
 	caracteres := []string{}
-	tamanhoGrid := len(grid)
-	tamanhoCaracteres := len(caracteres)
 
-	for iterador := 0; iterador < tamanhoGrid; iterador++ {
+	for iterador := 0; iterador < len(grid); iterador++ {
 		verifica := string(grid[iterador : iterador+1])
 		if strings.Contains(digitos, verifica) || verifica == "0" || verifica == "." {
 			caracteres = append(caracteres, verifica)
 		}
 	}
 
-	if tamanhoCaracteres != 81 {
+	if len(caracteres)!= 81 {
 		return nil, errors.New("Tamanho do grid não é 81")
 	}
 
@@ -167,11 +165,9 @@ func eliminar(valores map[string]string, index string, valor string) error{
 	}
 	valores[index] = strings.Replace(valores[index], valor, "", -1)
 
-	tamanhoValores := len(valores[index])
-
-	if tamanhoValores == 0 {
+	if len(valores[index]) == 0 {
 		return errors.New("O último valor foi removido do map de valores")
-	} else if tamanhoValores == 1 {
+	} else if len(valores[index]) == 1 {
 		tempValor := valores[index]
 		tudoEliminado := true
 		for _, iterador := range checagemElementos[index]{
