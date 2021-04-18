@@ -1,4 +1,4 @@
-package main
+package sudoku
 
 import (
 	"errors"
@@ -290,4 +290,12 @@ func busca(valores map[string]string) (map[string]string,error){
 		return resultado, nil
 	}
 	return nil, fmt.Errorf("Recursão funcionando.")
+}
+
+func Resolve(grid string) (map[string]string, error) {
+	resultado, err := analisaGrid(grid)
+	if err != nil {
+		return nil, err
+	}
+	return busca(resultado)
 }
