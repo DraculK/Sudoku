@@ -245,3 +245,49 @@ func copiarMap(valores map[string]string) map[string]string{
 
 	return copiarValor
 }
+
+func busca(valores map[string]string) (map[string]string,error){
+	if valores == nil {
+		return nil, fmt.Errorf("Puzzle errado")
+	}
+
+	resolvido := true
+	for index := range valores {
+		if len(valores[index]) !=1 {
+			resolvido = false
+		}
+	}
+
+	if resolvido {
+		return valores, nil
+	}
+
+	min := len(digitosValidos) + 1
+	indice := ""
+	for _, valor := range quadrados {
+		tamanho := len(valores[valor])
+		if tamanho > 1{
+			if tamanho < min {
+				indice = valor
+				min = tamanho
+			}
+		}
+	}
+
+	for _, valor1 := range valores[indice]{
+		testaValores := copiarMap(valores)
+		err := assign(testaValores, indice, string(valor1))
+		if err != nil {
+			continue
+		}
+
+		chamaBusca, _ := busca(testaValores)
+		resultado := checaZero(chamaBusca)
+
+		if resultado == nil{
+			continue
+		}
+		return resultado, nil
+	}
+	return nil, fmt.Errorf("Recursão funcionando.")
+}
