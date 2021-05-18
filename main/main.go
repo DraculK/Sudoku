@@ -11,6 +11,7 @@ func main() {
 	puzzle := "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
 
 	inicio := time.Now()
+	sudoku.PrettyDisplayInit(puzzle)
 	fmt.Println("Resolvendo..")
 	resultado, err := sudoku.Resolve(puzzle)
 	if err != nil {
@@ -18,6 +19,5 @@ func main() {
 	}
 	final := time.Since(inicio)
 	fmt.Println(final)
-	fmt.Println(resultado)
+	sudoku.PrettyDisplay(resultado)
 }
-

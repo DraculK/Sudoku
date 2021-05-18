@@ -18,14 +18,6 @@ var (
 	checagemElementos = getChecagemElementos()
 )
 
-func main() {
-	//fmt.Println(colunas)
-	//fmt.Println(quadrados)
-	//fmt.Println(listaCaracteres)
-	//fmt.Println(encontraCelula)
-	//fmt.Println(checagemElementos)
-}
-
 //Função para juntar as Linhas com as Conlunas, resultando em [A1,A2..I9]
 func cruzamento(linha, coluna []string) []string {
 	linha_Coluna := []string{}
@@ -131,7 +123,7 @@ func valoresGrid(grid string) (map[string]string, error) {
 		}
 	}
 
-	if len(caracteres)!= 81 {
+	if len(caracteres) != 81 {
 		return nil, errors.New("Tamanho do grid não é 81")
 	}
 
@@ -150,7 +142,7 @@ func assign(valores map[string]string, index string, valor string) error {
 	outrosValores := strings.Replace(valores[index], valor, "", -1)
 	for _, tempValor := range outrosValores {
 		if err := eliminar(valores, index, string(tempValor)); err != nil {
-			return err 
+			return err
 		}
 	}
 
@@ -158,9 +150,9 @@ func assign(valores map[string]string, index string, valor string) error {
 
 }
 
-func eliminar(valores map[string]string, index string, valor string) error{
+func eliminar(valores map[string]string, index string, valor string) error {
 	//Já eliminado
-	if !strings.Contains(valores[index], valor){
+	if !strings.Contains(valores[index], valor) {
 		return nil
 	}
 	valores[index] = strings.Replace(valores[index], valor, "", -1)
@@ -170,7 +162,7 @@ func eliminar(valores map[string]string, index string, valor string) error{
 	} else if len(valores[index]) == 1 {
 		tempValor := valores[index]
 		tudoEliminado := true
-		for _, iterador := range checagemElementos[index]{
+		for _, iterador := range checagemElementos[index] {
 			err := eliminar(valores, iterador, tempValor)
 			if err != nil {
 				tudoEliminado = false
@@ -182,10 +174,10 @@ func eliminar(valores map[string]string, index string, valor string) error{
 		}
 	}
 	//Quando a unidade for reduzida para apenas um espaço, checa se pode ser colocada lá.
-	for _, unidade := range encontraCelula[index]{
+	for _, unidade := range encontraCelula[index] {
 		espaco := []string{}
 		for _, unidade2 := range unidade {
-			if strings.Contains(valores[unidade2], valor){
+			if strings.Contains(valores[unidade2], valor) {
 				espaco = append(espaco, unidade2)
 			}
 		}
@@ -214,11 +206,11 @@ func analisaGrid(grid string) (map[string]string, error) {
 		return nil, err
 	}
 
-	for index, valor := range novoGrid{
+	for index, valor := range novoGrid {
 
-		if strings.Contains(digitos, valor){
+		if strings.Contains(digitos, valor) {
 			err := assign(valores, index, valor)
-			if err != nil{
+			if err != nil {
 				return nil, err
 			}
 		}
@@ -229,7 +221,7 @@ func analisaGrid(grid string) (map[string]string, error) {
 
 func checaZero(verifica map[string]string) map[string]string {
 	for index := range verifica {
-		if index == ""{
+		if index == "" {
 			return nil
 		}
 	}
@@ -237,7 +229,7 @@ func checaZero(verifica map[string]string) map[string]string {
 	return verifica
 }
 
-func copiarMap(valores map[string]string) map[string]string{
+func copiarMap(valores map[string]string) map[string]string {
 	copiarValor := make(map[string]string, len(valores))
 	for index, valor := range valores {
 		copiarValor[index] = valor
@@ -246,14 +238,14 @@ func copiarMap(valores map[string]string) map[string]string{
 	return copiarValor
 }
 
-func busca(valores map[string]string) (map[string]string,error){
+func busca(valores map[string]string) (map[string]string, error) {
 	if valores == nil {
 		return nil, fmt.Errorf("Puzzle errado")
 	}
 
 	resolvido := true
 	for index := range valores {
-		if len(valores[index]) !=1 {
+		if len(valores[index]) != 1 {
 			resolvido = false
 		}
 	}
@@ -266,7 +258,7 @@ func busca(valores map[string]string) (map[string]string,error){
 	indice := ""
 	for _, valor := range quadrados {
 		tamanho := len(valores[valor])
-		if tamanho > 1{
+		if tamanho > 1 {
 			if tamanho < min {
 				indice = valor
 				min = tamanho
@@ -274,7 +266,7 @@ func busca(valores map[string]string) (map[string]string,error){
 		}
 	}
 
-	for _, valor1 := range valores[indice]{
+	for _, valor1 := range valores[indice] {
 		testaValores := copiarMap(valores)
 		err := assign(testaValores, indice, string(valor1))
 		if err != nil {
@@ -284,7 +276,7 @@ func busca(valores map[string]string) (map[string]string,error){
 		chamaBusca, _ := busca(testaValores)
 		resultado := checaZero(chamaBusca)
 
-		if resultado == nil{
+		if resultado == nil {
 			continue
 		}
 		return resultado, nil
@@ -298,4 +290,46 @@ func Resolve(grid string) (map[string]string, error) {
 		return nil, err
 	}
 	return busca(resultado)
+}
+
+// PrettyDisplay : used to output on cli
+func PrettyDisplay(values map[string]string) {
+	for r, row := range linhas {
+		for c, col := range colunas {
+			if c == 3 || c == 6 {
+				fmt.Printf("| ")
+			}
+			fmt.Printf("%v ", values[string(row)+string(col)])
+		}
+		fmt.Println()
+		if r == 2 || r == 5 {
+			fmt.Println("------+-------+-------")
+		}
+	}
+}
+
+//usado para imprimir a string inicial em formato de sudoku
+func PrettyDisplayInit(values string) {
+	fmt.Printf("---------------------- \n")
+	fmt.Printf("|    JOGO SUDOKU     |\n")
+	fmt.Printf("---------------------- \n")
+	i := 0
+	j := 1
+	for r := range linhas {
+		j--
+		for c := range colunas {
+			if c == 3 || c == 6 {
+				fmt.Printf("| ")
+			}
+			fmt.Printf("%c ", values[i+j])
+
+			//fmt.Printf("%v ", i+j)
+			j++
+		}
+		i++
+		fmt.Println()
+		if r == 2 || r == 5 {
+			fmt.Println("------+-------+-------")
+		}
+	}
 }
